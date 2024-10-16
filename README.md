@@ -1,41 +1,82 @@
-# Langchain + Dendrite = Use any website with your AI Agents
+# Langchain + Dendrite = AI Agents than can use any website
 
-This repo showcases how to build a simple **Langchain** AI agent that can use a wide variety of websites as tools to in a cheap, fast and reliable way, using the [Dendrite](https://github.com/dendrite-systems/dendrite-python-sdk) Browser SDK.
-
-The same tools can be used for building with [Langgraph](https://github.com/langchain-ai/langgraph)
+This example repo contains a simple [LangChain](https://github.com/langchain-ai/langchain/tree/master) AI agent that can use a wide variety of websites using the [Dendrite Browser SDK](https://github.com/dendrite-systems/dendrite-python-sdk). (Same concepts apply to building a [LangGraph agent](https://github.com/langchain-ai/langgraph))
 
 ## Overview
 
-This Langchain OpenAI Tools Agent can:
+This repo includes a Langchain OpenAI Tools Agent, with a streamlit UI, that has tools to:
 
-1. Search for trademarks to determine if a trademark is available
+1. Search for conflicting trademarks
 2. Check the status of the OpenAI API
-3. Look for new posts on Product Hunt
+3. Look for new products on Product Hunt
+4. Send emails
 
-Streamlit is used to create a simple UI for interacting with the AI agent.
+*(Very random choice of tools I know, but the purpose of this example is to showcase that any website can be used – even if authentication is required!)*
 
-The purpose of this example is to showcase that any website can be used as a tool with Dendrite, even if authentication is required.
+## Getting Started
+
+I highly suggest using Poetry to install and run this project. Download Poetry [here](https://python-poetry.org/)
+
+1. **Start by cloning the repo:**
+
+```bash
+git clone https://github.com/dendrite-systems/langchain-dendrite-example.git
+```
+```bash
+cd langchain-dendrite-example
+```
+
+2. **Install the project:** Run the following command:
+
+```bash
+poetry install && poetry run dendrite install
+```
+
+or with pip
+
+```bash
+pip install -r requirements.txt && dendrite install
+```
+
+**Important:** Don't forget to run `dendrite install`, since this installs the browser binaries.
+
+3. **Create a `.env` file**. It should contain an OpenAI and Dendrite API key.
+
+Get a free Dendrite API key [here](https://dendrite.systems/create-account).
+
+```
+OPENAI_API_KEY=sk-Cs...
+DENDRITE_API_KEY=sk_4b0...
+```
+
+4. **Run the project:**
+
+```bash
+poetry run streamlit run agent.py
+```
+
+or with pip
+
+```bash
+streamlit run agent.py
+```
 
 ## Tools 
 
-Below are all the tools used in this example:
+Below are all the custom tools provided to our AI agent:
 
+---
 
-### Extract API Status
+### Extract API Status Tool
 
-![API Status Demo](https://github.com/dendrite-systems/langchain-docs-agent-example/tree/main/demos/APIStatusDemo.gif)
+This tool uses Dendrite's `extract` function to get OpenAI's API status.
 
-Allowing your AI agent to fetch strutured data is easy with Dendrite. Just prompt or define pydantic models to describe the data you want to extract.
+Behind the scenes, Dendrite will create a bs4 script that will be stored and reused for all future requests to increase speed and remove inference costs.
 
-Behind the scenes, Dendrite will create a script that will be stored and reused for all future requests, to increase performance and lower costs.
+![API Status Demo](https://github.com/dendrite-systems/langchain-docs-agent-example/blob/main/demos/APIStatusDemo.gif)
 
-```python tools/openai_api_status.py
-from typing import Optional
-from pydantic import BaseModel, Field
-from langchain_core.tools import tool
-from dendrite_sdk import AsyncDendrite
-
-
+`tools/openai_api_status.py`
+```python
 class ServiceStatus(BaseModel):
     name: str = Field(description="The name of the service.")
     status: str = Field(description="e.g 'operational' or 'partial outage'.")
@@ -63,15 +104,21 @@ async def get_openai_api_status() -> APIStatus:
         return service_status
 ```
 
-### Extract from Product Hunt and Send Email
+---
 
-![Product Hunt Tool Demo](https://github.com/dendrite-systems/langchain-docs-agent-example/tree/main/demos/EmailProductHuntDemo.gif)
+### Extract from Product Hunt Tool and Send Email Tool
 
 You can do more than just extract data from websites. You can also authenticate and interact with them.
 
-By giving our AI agent a send email tool, and a tool to extract data from Product Hunt, we can create an AI agent that can monitor Product Hunt for new posts and send an email when a new post is detected!
+By giving our AI agent a send email tool and a tool to extract data from Product Hunt, we can create an AI agent that can monitor Product Hunt for new posts and send an email when a new post is detected!
 
-```python tools/email.py
+For the email tool to work, you'll need to authenticate first via Dendrite Vault. [Read the Dendrite docs to learn how](https://docs.dendrite.systems/concepts/authentication).
+
+![Product Hunt Tool Demo](https://github.com/dendrite-systems/langchain-docs-agent-example/blob/main/demos/EmailProductHuntDemo.gif)
+
+
+`tools/email.py`
+```python
 from dendrite_sdk import AsyncDendrite
 from langchain_core.tools import tool
 
@@ -91,7 +138,8 @@ async def send_email(email_address: str, subject: str, body: str):
 
 ```
 
-```python tools/producthunt.py
+`tools/producthunt.py`
+```python
 from langchain_core.tools import tool
 from dendrite_sdk import AsyncDendrite
 
@@ -119,14 +167,16 @@ async def read_more(url: str) -> str:
         return info
 ```
 
+---
 
-### Trademark Search
-
-![Trademark Search Tool Demo](https://github.com/dendrite-systems/langchain-docs-agent-example/tree/main/demos/TrademarkDemo.gif)
+### Trademark Search Tool
 
 If you want to build an AI agent that can search for trademarks so it can help you quickly determine if a trademark is available, just give your AI agent a tool like this:
 
-```python tools/search_trademarks.py
+![Trademark Search Tool Demo](https://github.com/dendrite-systems/langchain-docs-agent-example/blob/main/demos/TrademarkDemo.gif)
+
+`tools/search_trademarks.py`
+```python
 import asyncio
 from dendrite_sdk import AsyncDendrite
 from langchain_core.tools import tool
@@ -152,29 +202,9 @@ async def search_trademarks(trademark_search_name: str) -> str:
     return trademarks
 ```
 
-## Getting Started
+## Contributing
 
-I highly suggest using Poetry to install and run this project.
-
-Download Poetry [here](https://python-poetry.org/)
-
-Start by cloning the repo:
-
-```bash
-git clone https://github.com/dendrite-systems/langchain-dendrite-example.git
-```
-
-To install the project, run the following command:
-
-```bash
-poetry install && poetry run dendrite install
-```
-
-To run the project, run the following command:
-
-```bash
-poetry run streamlit run agent.py
-```
+If you have an idea for a cool tool that you'd like to add, create a pull request – contribution is warmly welcome!
 
 ## Support
 
