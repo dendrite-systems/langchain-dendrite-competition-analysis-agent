@@ -13,7 +13,7 @@ This repo contains a Langchain OpenAI Tools Agent, with a streamlit UI, that can
 3. Look for new products on Product Hunt
 4. Send emails via gmail
 
-*The choice of tools seems random, but the purpose of this example is to showcase that any website can be used – even if authentication is required!*
+*Very random choice of tools I know, but the purpose of this example is to showcase that any website can be used – even if authentication is required!*
 
 ## Getting Started
 
