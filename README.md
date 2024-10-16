@@ -23,7 +23,7 @@ Below are all the tools used in this example:
 
 ### Extract API Status
 
-[![Email Sending Tool Demo](https://img.youtube.com/vi/vd_LMvkLltM/0.jpg)](https://www.youtube.com/watch?v=vd_LMvkLltM)
+![API Status Demo](https://github.com/dendrite-systems/langchain-docs-agent-example/tree/main/demos/APIStatusDemo.gif)
 
 Allowing your AI agent to fetch strutured data is easy with Dendrite. Just prompt or define pydantic models to describe the data you want to extract.
 
@@ -65,7 +65,7 @@ async def get_openai_api_status() -> APIStatus:
 
 ### Extract from Product Hunt and Send Email
 
-[![Product Hunt Tool Demo](https://img.youtube.com/vi/Wd_rQXoVFyM/0.jpg)](https://www.youtube.com/watch?v=Wd_rQXoVFyM)
+![Product Hunt Tool Demo](https://github.com/dendrite-systems/langchain-docs-agent-example/tree/main/demos/EmailProductHuntDemo.gif)
 
 You can do more than just extract data from websites. You can also authenticate and interact with them.
 
@@ -122,7 +122,7 @@ async def read_more(url: str) -> str:
 
 ### Trademark Search
 
-[![Product Hunt Tool Demo](https://img.youtube.com/vi/ov-QI5SQbTo/0.jpg)](https://www.youtube.com/watch?v=ov-QI5SQbTo)
+![Trademark Search Tool Demo](https://github.com/dendrite-systems/langchain-docs-agent-example/tree/main/demos/TrademarkDemo.gif)
 
 If you want to build an AI agent that can search for trademarks so it can help you quickly determine if a trademark is available, just give your AI agent a tool like this:
 
