@@ -1,6 +1,6 @@
 # Langchain + Dendrite = AI Agents than can use any website
 
-This example repo contains a simple [Langchain](https://github.com/langchain-ai/langchain/tree/master) AI agent that can use a wide variety of websites using [Dendrite Browser SDK](https://github.com/dendrite-systems/dendrite-python-sdk).
+This example repo contains a simple [LangChain](https://github.com/langchain-ai/langchain/tree/master) AI agent that can use a wide variety of websites using the [Dendrite Browser SDK](https://github.com/dendrite-systems/dendrite-python-sdk). (Same concepts apply to building a [LangGraph agent](https://github.com/langchain-ai/langgraph))
 
 ## Overview
 
@@ -49,7 +49,7 @@ OPENAI_API_KEY=sk-Cs...
 DENDRITE_API_KEY=sk_4b0...
 ```
 
-4. **Run the project** by running the following command:
+4. **Run the project:**
 
 ```bash
 poetry run streamlit run agent.py
