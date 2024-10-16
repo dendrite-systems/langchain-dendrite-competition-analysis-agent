@@ -1,19 +1,17 @@
 # Langchain + Dendrite = AI Agents than can use any website
 
-This repo showcases how to build a simple [Langchain](https://github.com/langchain-ai/langchain/tree/master) AI agent that can use a wide variety of websites as tools using the [Dendrite](https://github.com/dendrite-systems/dendrite-python-sdk) Browser SDK.
-
-Similar methodology for making tools can be used with [Langgraph](https://github.com/langchain-ai/langgraph).
+This example repo contains a simple [Langchain](https://github.com/langchain-ai/langchain/tree/master) AI agent that can use a wide variety of websites using [Dendrite Browser SDK](https://github.com/dendrite-systems/dendrite-python-sdk).
 
 ## Overview
 
-This repo contains a Langchain OpenAI Tools Agent, with a streamlit UI, that can:
+This repo includes a Langchain OpenAI Tools Agent, with a streamlit UI, that has tools to:
 
 1. Search for conflicting trademarks
 2. Check the status of the OpenAI API
 3. Look for new products on Product Hunt
-4. Send emails via gmail
+4. Send emails
 
-*Very random choice of tools I know, but the purpose of this example is to showcase that any website can be used – even if authentication is required!*
+*(Very random choice of tools I know, but the purpose of this example is to showcase that any website can be used – even if authentication is required!)*
 
 ## Getting Started
 
@@ -34,9 +32,15 @@ cd langchain-dendrite-example
 poetry install && poetry run dendrite install
 ```
 
+or with pip
+
+```bash
+pip install -r requirements.txt && dendrite install
+```
+
 **Important:** Don't forget to run `dendrite install`, since this installs the browser binaries.
 
-3. **Create a `.env` file** with an OpenAI and Dendrite API key.
+3. **Create a `.env` file**. It should contain an OpenAI and Dendrite API key.
 
 Get a free Dendrite API key [here](https://dendrite.systems/create-account).
 
@@ -51,6 +55,11 @@ DENDRITE_API_KEY=sk_4b0...
 poetry run streamlit run agent.py
 ```
 
+or with pip
+
+```bash
+streamlit run agent.py
+```
 
 ## Tools 
 
