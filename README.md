@@ -1,18 +1,23 @@
 ![Dendrite Demo (1)](https://github.com/user-attachments/assets/ac96d6d1-29c0-4680-8168-08440a862d24)
 
+
+https://github.com/user-attachments/assets/97d1b506-97b6-401a-98d7-3153dd6d3918
+
+***
+
 This example repo contains a simple [LangChain](https://github.com/langchain-ai/langchain/tree/master) AI agent that can help us detect competitors by using a variety of websites with the [Dendrite Browser SDK](https://github.com/dendrite-systems/dendrite-python-sdk). (Same concepts apply to building a [LangGraph agent](https://github.com/langchain-ai/langgraph))
 
-
-
+<br /><br />
 ## Overview/Features
 Repo contains:
 - Langchain OpenAI Tools Agent
-- Pretty Streamlit UI
+- Streamlit UI
 - Tool to extract and read about the latest posts on
   - Product Hunt
   - Hacker News
 - Tool to log into Outlook and send emails
 
+<br /><br />
 ## Prerequisites
 
 To run this yourself locally, you'll need the following:
@@ -25,6 +30,26 @@ To run this yourself locally, you'll need the following:
 Pro tip:
 - [Install Poetry package manager](https://python-poetry.org/)
 
+<br /><br />
+## Dendrite Example Snippet
+
+This is how easy it is to authenticate and send an email with Dendrite:
+
+```python
+@tool
+async def send_email(email_address: str, subject: str, body: str):
+    """This tool sends an email to the provided email address with the provided subject and body. Don't use markdown in the body."""
+    async with AsyncDendrite(auth="outlook.live.com") as client:
+        await client.goto("https://outlook.live.com/mail/0/")
+        await client.click("the new email button")
+        await client.fill_fields(
+            {"to_field": email_address, "subject_field": subject, "body_field": body}
+        )
+        await client.click("the send email button")
+
+```
+
+<br /><br />
 ## Getting Started
 
 1. **Download this repo:**
@@ -84,13 +109,21 @@ Pro tip:
    Hi, I'm building an AI tool called FooBar. Please find any new potential competitors and summarise them. Send the summaries to me via [enter email here].
    ```
 
+<br /><br />
+## Why is Dendrite so slow the first time I run a tool, and then so fast?
 
+It's because the first time you call `client.extract("get all the product hunt posts")` our coding agents need to generate a script to fetch the products from the HTML.
+
+The next time you call the same prompt (and the website structure hasn't changed), the same script will be re-used – instantly returning the data.
+
+<br /><br />
 ## Contributing
 
 Have any cool ideas for features/improvements, create a pull request – contribution is warmly welcome! :)
 
-(I'd personally love to see chainlit added, I don't have time to add it now though)
+(I'd personally love to see chainlit added, I don't have time to add it now though!)
 
+<br /><br />
 ## Support
 
 If you have any questions or need help, please join the [Dendrite Discord](https://discord.gg/4rsPTYJpFb)
