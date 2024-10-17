@@ -1,3 +1,4 @@
+import asyncio
 from langchain_core.tools import tool
 from dendrite_sdk import AsyncDendrite
 
@@ -8,6 +9,7 @@ async def get_all_product_hunt_posts() -> str:
     async with AsyncDendrite() as client:
         await client.goto(f"https://www.producthunt.com/")
         await client.click("the see all of today's posts button")
+        await asyncio.sleep(5)
         posts = await client.extract(
             "Get all today's posts from product hunt as a string containing name, desc, categories, upvotes and url"
         )
@@ -15,8 +17,8 @@ async def get_all_product_hunt_posts() -> str:
 
 
 @tool
-async def read_more(url: str) -> str:
-    """If you want to learn more about a producthunt product, call this function."""
+async def read_more_product_hunt(url: str) -> str:
+    """If you want to learn more about a producthunt product, call this function. Use this tool to research a product closer."""
     async with AsyncDendrite() as client:
         await client.goto(url)
         info = await client.extract(

@@ -1,30 +1,25 @@
 import asyncio
 import streamlit as st
-
-
+import os
 from dotenv import load_dotenv, find_dotenv
-import asyncio
-import streamlit as st
+
 from langchain import hub
 from langchain.agents import AgentExecutor, create_openai_tools_agent
 from langchain_openai import ChatOpenAI
 
 from tools.email import send_email
-from tools.producthunt import get_all_product_hunt_posts, read_more
-from tools.search_trademarks import search_trademarks
-from tools.openai_api_status import get_openai_api_status
-
-load_dotenv(find_dotenv())
+from tools.producthunt import get_all_product_hunt_posts, read_more_product_hunt
+from tools.hackernews import get_all_hackernews_posts, read_more_hackernews
 
 
-# Competition agent – easy to build, useful
-
+env_path = find_dotenv()
+load_dotenv(env_path)
 
 tools = [
-    get_openai_api_status,
-    search_trademarks,
     get_all_product_hunt_posts,
-    read_more,
+    get_all_hackernews_posts,
+    read_more_hackernews,
+    read_more_product_hunt,
     send_email,
 ]
 
@@ -45,7 +40,10 @@ async def process_user_input(user_input, chat_history):
 
 # Streamlit UI
 def main():
-    st.title("AI Agent Chat")
+    st.title("Competition Watch AI Agent")
+    st.markdown(
+        "Uses [LangChain](https://python.langchain.com/) for the AI agent and [Dendrite](https://dendrite.systems/) for the web interactions."
+    )
 
     # Initialize chat history
     if "messages" not in st.session_state:
