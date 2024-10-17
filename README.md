@@ -2,6 +2,10 @@
 
 
 
+https://github.com/user-attachments/assets/50c2d2e8-3d25-4204-b8dd-272f4f54eafe
+
+
+
 
 This example repo contains a simple [LangChain](https://github.com/langchain-ai/langchain/tree/master) AI agent that can use a wide variety of websites using the [Dendrite Browser SDK](https://github.com/dendrite-systems/dendrite-python-sdk). (Same concepts apply to building a [LangGraph agent](https://github.com/langchain-ai/langgraph))
 
