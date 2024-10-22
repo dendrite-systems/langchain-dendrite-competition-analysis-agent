@@ -71,7 +71,7 @@ async def stream_graph_updates(user_input: str, messages: list):
 def main():
     st.title("Competition Watch AI Agent")
     st.markdown(
-        "Uses [LangChain](https://python.langchain.com/) for the AI agent and [Dendrite](https://dendrite.systems/) for the web interactions."
+        "Uses Langgraph for the AI agent and [Dendrite](https://dendrite.systems/) for the web interactions."
     )
 
     # Initialize chat history
