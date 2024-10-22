@@ -5,12 +5,12 @@ https://github.com/user-attachments/assets/97d1b506-97b6-401a-98d7-3153dd6d3918
 
 ***
 
-This example repo contains a simple [LangChain](https://github.com/langchain-ai/langchain/tree/master) AI agent that can help us detect competitors by using a variety of websites with the [Dendrite Browser SDK](https://github.com/dendrite-systems/dendrite-python-sdk). (Same concepts apply to building a [LangGraph agent](https://github.com/langchain-ai/langgraph))
+This example repo contains a simple [LangGraph agent](https://github.com/langchain-ai/langgraph) AI agent that can help us detect competitors by using a variety of websites with the [Dendrite Browser SDK](https://github.com/dendrite-systems/dendrite-python-sdk).
 
 <br /><br />
 ## Overview/Features
 Repo contains:
-- Langchain OpenAI Tools Agent
+- Langgraph Agent
 - Streamlit UI
 - Tool to extract and read about the latest posts on
   - Product Hunt
