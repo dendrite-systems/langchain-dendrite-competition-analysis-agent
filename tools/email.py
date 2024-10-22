@@ -9,6 +9,10 @@ async def send_email(email_address: str, subject: str, body: str):
         await client.goto("https://outlook.live.com/mail/0/")
         await client.click("the new email button")
         await client.fill_fields(
-            {"to_field": email_address, "subject_field": subject, "body_field": body}
+            {
+                "the_to_field": email_address,
+                "the_subject_field": subject,
+                "the_body_field": body,
+            }
         )
         await client.click("the send email button")

@@ -11,7 +11,8 @@ async def get_all_product_hunt_posts() -> str:
         await client.click("the see all of today's posts button")
         await asyncio.sleep(5)
         posts = await client.extract(
-            "Get all today's posts from product hunt as a string containing name, desc, categories, upvotes and url"
+            "Get all today's posts from product hunt as a string containing name, desc, categories, upvotes and url",
+            use_cache=False,
         )
         return posts
 

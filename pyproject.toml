@@ -9,9 +9,11 @@ readme = "README.md"
 python = "^3.12"
 langchain = "^0.3.3"
 langchain-openai = "^0.2.2"
-dendrite-sdk = "^0.2.1"
+dendrite-sdk = "^0.2.2"
 streamlit = "^1.39.0"
 python-dotenv = "^1.0.1"
+langgraph = "^0.2.39"
+langsmith = "^0.1.136"
 
 
 [build-system]

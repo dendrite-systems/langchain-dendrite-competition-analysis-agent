@@ -1,19 +1,25 @@
 import asyncio
+from typing import Annotated, TypedDict
 import streamlit as st
-import os
 from dotenv import load_dotenv, find_dotenv
 
-from langchain import hub
-from langchain.agents import AgentExecutor, create_openai_tools_agent
 from langchain_openai import ChatOpenAI
-
-from tools.email import send_email
-from tools.producthunt import get_all_product_hunt_posts, read_more_product_hunt
-from tools.hackernews import get_all_hackernews_posts, read_more_hackernews
+from langgraph.graph import StateGraph
+from langgraph.graph.message import add_messages
+from langgraph.prebuilt import ToolNode, tools_condition
 
 
 env_path = find_dotenv()
 load_dotenv(env_path)
+
+
+from tools.email import send_email
+from tools.producthunt import (
+    get_all_product_hunt_posts,
+    read_more_product_hunt,
+)
+from tools.hackernews import get_all_hackernews_posts, read_more_hackernews
+
 
 tools = [
     get_all_product_hunt_posts,
@@ -23,19 +29,42 @@ tools = [
     send_email,
 ]
 
-prompt = hub.pull("hwchase17/openai-tools-agent")
+
+class State(TypedDict):
+    messages: Annotated[list, add_messages]
+
+
+graph_builder = StateGraph(State)
+
 llm = ChatOpenAI(model="gpt-4o", temperature=0)
-agent = create_openai_tools_agent(llm, tools, prompt)
-agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
+llm_with_tools = llm.bind_tools(tools)
 
 
-async def process_user_input(user_input, chat_history):
-    command = {
-        "input": user_input,
-        "chat_history": chat_history,
-    }
-    response = await agent_executor.ainvoke(command)
-    return response["output"]
+async def chatbot(state: State):
+    return {"messages": [await llm_with_tools.ainvoke(state["messages"])]}
+
+
+graph_builder.add_node("chatbot", chatbot)
+
+tool_node = ToolNode(tools=tools)
+graph_builder.add_node("tools", tool_node)
+graph_builder.add_conditional_edges(
+    "chatbot",
+    tools_condition,
+)
+graph_builder.add_edge("tools", "chatbot")
+graph_builder.set_entry_point("chatbot")
+graph = graph_builder.compile()
+
+
+async def stream_graph_updates(user_input: str, messages: list):
+    past_messages = [(msg["role"], msg["content"]) for msg in messages]
+    past_messages.append(("user", user_input))
+
+    content = await graph.ainvoke(
+        {"messages": past_messages},
+    )
+    return content["messages"][-1].content
 
 
 # Streamlit UI
@@ -65,7 +94,7 @@ def main():
             message_placeholder = st.empty()
             message_placeholder.markdown("Thinking...")
             full_response = asyncio.run(
-                process_user_input(prompt, st.session_state.messages)
+                stream_graph_updates(prompt, st.session_state.messages)
             )
             message_placeholder.markdown(full_response)
 
